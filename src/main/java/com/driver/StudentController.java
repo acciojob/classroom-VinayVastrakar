@@ -25,15 +25,20 @@ public class StudentController {
     @PostMapping("/add-student")
     public ResponseEntity<String> addStudent(@RequestBody Student student){
 
-         studentService.addStudent(student);
-        return new ResponseEntity<>("New student added successfully", HttpStatus.CREATED);
+        boolean b= studentService.addStudent(student);
+        if(b){
+            return new ResponseEntity<>("New student added successfully", HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>("Already Present", HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/add-teacher")
     public ResponseEntity<String> addTeacher(@RequestBody Teacher addTeacher){
 
-        studentService.addTeacher(addTeacher);
-        return new ResponseEntity<>("New teacher added successfully", HttpStatus.CREATED);
+        boolean b= studentService.addTeacher(addTeacher);
+        if(b)
+            return new ResponseEntity<>("New teacher added successfully", HttpStatus.CREATED);
+        return new ResponseEntity<>("Teacher Already Added ", HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping("/add-student-teacher-pair")

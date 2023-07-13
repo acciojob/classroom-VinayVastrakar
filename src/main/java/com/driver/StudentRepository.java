@@ -15,12 +15,21 @@ public class StudentRepository {
     private HashMap<String  ,List<String>> studentTeacherDB = new HashMap<>();
 
 
-    public void addStudent(Student student) {
+    public boolean addStudent(Student student) {
+        if(studentDB.containsKey(student.getName())){
+            return false;
+        }
         studentDB.put(student.getName(),student);
+        return true;
     }
 
-    public void addTeacher(Teacher addTeacher) {
+    public boolean addTeacher(Teacher addTeacher) {
+        if(teacherDB.containsKey(addTeacher.getName())){
+            return false;
+        }
+
         teacherDB.put(addTeacher.getName(),addTeacher);
+        return true;
     }
 
     public void addStudentTeacherPair(String student, String teacher) {
@@ -34,21 +43,12 @@ public class StudentRepository {
     }
 
     public Student getStudentByName(String name) {
-        for (String std : studentDB.keySet() ) {
-            if(name.equals(std)){
-                return  studentDB.get(std);
-            }
-        }
-        return null;
+                return  studentDB.get(name);
     }
 
     public Teacher getTeacherByName(String name) {
-        for (String std : teacherDB.keySet() ) {
-            if(name.equals(std)){
-                return  teacherDB.get(std);
-            }
-        }
-        return null;
+
+                return  teacherDB.get(name);
     }
 
     public List<String> getStudentsByTeacherName(String teacher) {
@@ -70,10 +70,12 @@ public class StudentRepository {
 
     public void deleteTeacherByName(String teacher) {
         teacherDB.remove(teacher);
+        studentTeacherDB.remove(teacher);
     }
 
     public void deleteAllTeachers() {
 
         teacherDB.clear();
+        studentTeacherDB.clear();
     }
 }

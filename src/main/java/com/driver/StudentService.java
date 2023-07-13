@@ -11,12 +11,15 @@ public class StudentService {
     @Autowired
     StudentRepository studentRepository;
 
-    public void addStudent(Student student) {
-        studentRepository.addStudent(student);
+    public boolean addStudent(Student student) {
+        boolean b= studentRepository.addStudent(student);
+
+        return b;
     }
 
-    public void addTeacher(Teacher addTeacher) {
-        studentRepository.addTeacher(addTeacher);
+    public boolean addTeacher(Teacher addTeacher) {
+       boolean b= studentRepository.addTeacher(addTeacher);
+        return b;
     }
 
     public void addStudentTeacherPair(String student, String teacher) {
