@@ -24,9 +24,13 @@ public class StudentRepository {
     }
 
     public void addStudentTeacherPair(String student, String teacher) {
-        List<String> list =new ArrayList<>();
-        list.add(student);
-        studentTeacherDB.put(teacher, list);
+        List<String> students = studentTeacherDB.getOrDefault(teacher, new ArrayList<String>());
+        students.add(student);
+        Teacher teacher1= teacherDB.get(teacher);
+        teacher1.setNumberOfStudents(students.size());
+        studentTeacherDB.put(teacher, students);
+
+
     }
 
     public Student getStudentByName(String name) {
