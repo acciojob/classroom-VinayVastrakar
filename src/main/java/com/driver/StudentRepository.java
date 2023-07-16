@@ -33,31 +33,44 @@ public class StudentRepository {
     }
 
     public void addStudentTeacherPair(String student, String teacher) {
-        List<String> students = studentTeacherDB.getOrDefault(teacher, new ArrayList<String>());
-        students.add(student);
-        Teacher teacher1= teacherDB.get(teacher);
-        teacher1.setNumberOfStudents(students.size());
-        studentTeacherDB.put(teacher, students);
+        if (studentDB.containsKey(student) && teacherDB.containsKey((teacher))) {
 
+            if (studentTeacherDB.containsKey(teacher)) {
+                List<String> list = studentTeacherDB.get(teacher);
+                list.add(student);
+                studentTeacherDB.put(teacher, list);
+            } else {
+                List<String> al = new ArrayList<>();
+                al.add(student);
+                studentTeacherDB.put(teacher, al);
+            }
+        }
 
     }
 
     public Student getStudentByName(String name) {
-                return  studentDB.get(name);
+        if(studentDB.containsKey(name)) {
+            return studentDB.get(name);
+        } else {
+            return null;
+        }
     }
 
     public Teacher getTeacherByName(String name) {
 
-                return  teacherDB.get(name);
+        if(teacherDB.containsKey(name)) {
+            return teacherDB.get(name);
+        } else {
+            return null;
+        }
     }
 
     public List<String> getStudentsByTeacherName(String teacher) {
-        for (String teach: studentTeacherDB.keySet() ) {
-            if(teacher.equals(teach)){
-                return studentTeacherDB.get(teach);
-            }
+        if(studentTeacherDB.containsKey(teacher)) {
+            return studentTeacherDB.get(teacher);
+        } else {
+            return new ArrayList<>();
         }
-        return null;
     }
 
     public List<String> getAllStudents() {
@@ -70,12 +83,24 @@ public class StudentRepository {
 
     public void deleteTeacherByName(String teacher) {
         teacherDB.remove(teacher);
-        studentTeacherDB.remove(teacher);
+
+        List<String> al = studentTeacherDB.remove(teacher);
+        for(int i=0; i<al.size(); i++) {
+            String temp = al.get(i);
+            studentDB.remove(temp);
+        }
     }
 
     public void deleteAllTeachers() {
 
-        teacherDB.clear();
-        studentTeacherDB.clear();
+        for(String k: studentTeacherDB.keySet()) {
+            teacherDB.remove(k);
+            List<String> al = studentTeacherDB.remove(k);
+            for(String p: al) {
+                if(studentDB.containsKey(p)) {
+                    studentDB.remove(p);
+                }
+            }
+        }
     }
 }
